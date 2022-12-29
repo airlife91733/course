@@ -61,7 +61,7 @@
           <div class="col">
             <div class="card shadow-sm">
               <a class="d-block">
-                <img class="img-thumbnail" src="" with="100%" heigh="225" alt="img">
+                <img class="img-thumbnail" src="#" with="100%" heigh="225" alt="img">
               </a>
               <div class="card-body">
                 <span class="mb-1">沒有課程！</span>
@@ -152,21 +152,21 @@
       <div class="modal-content">
         
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">正弦團隊培訓系統</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel1">正弦團隊培訓系統</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
         <div class="modal-body">
-          <form>
+          <form id="login_form" action="?login_attempt=1" method="POST">
             <div>
-              <h1 class="modal-title fs-5" id="exampleModalLabel">登入培訓系統</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel2">登入培訓系統</h1>
             </div>
             <div class="form-floating">
-              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+              <input type="text" class="form-control" id="floatingInput" name="user" placeholder="name@example.com">
               <label for="floatingInput">Email address</label>
             </div>
             <div class="form-floating">
-              <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+              <input type="password" class="form-control" id="floatingPassword" name="pwd" placeholder="Password">
               <label for="floatingPassword">Password</label>
             </div>
 
@@ -175,6 +175,7 @@
             </div>
             
             <div class="d-grid gap-2 col mx-auto">
+              <input type="submit" value="提交" />
               <button class="btn btn-lg btn-primary" type="submit" onclick="login()">登入</button>
             </div>
             
@@ -240,10 +241,41 @@
     }
     
     function login() {
-      let user = "kevinchang";
-      let closemodal = document.querySelector(".btn-close").click(); 
-      setCookie("username", user, 30);
-      checkCookie();
+      //let closemodal = document.querySelector(".btn-close").click();
+      let script_id = "AKfycbyFf_PHsaT1SKT_7NRukcmaigO0QxepC3nhR2tGB2izdAd1sXJfMjOXNFVHB3biGCko1A";
+      let script_url = "https://script.google.com/macros/s/" + script_id + "/exec";
+      let login_form = "#login_form";
+      let user = document.querySelector("#floatingInput").value;
+      let pwd = document.querySelector("#floatingPassword").value;
+      let headers = {
+          "Content-Type": "text/plain;charset=utf-8"
+      };
+      // 設置參數
+      let data = {
+          user: user,
+          pwd: pwd
+      };
+      
+      //parameters: 
+      
+      document.querySelector(login_form)
+        .addEventListener('submit', (e) => {
+          // 阻止表單送出
+          e.preventDefault();
+          
+          console.log(data);
+          
+          // 送出 request
+          fetch(script_url, {
+            redirect: "follow",
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+          }).then((response) => response.json())
+            .then((response) => console.log(response))
+        });
+      //setCookie("username", user, 30);
+      //checkCookie();
     }
     
     function logout() {
@@ -281,7 +313,7 @@
     }
     
     function saveIt(name) {
-      var x = document.forms['cookieform'].cookievalue.value;
+      let x = document.forms['cookieform'].cookievalue.value;
       if (!x)
         alert('Please fill in a value in the input box.');
       else {
@@ -300,27 +332,28 @@
     }
 
     function init() {
-      for (var i=1;i<3;i++) {
-        var x = Cookies['ppkcookie' + i];
+      for (let i=1;i<3;i++) {
+        let x = Cookies['ppkcookie' + i];
         if (x) alert('Cookie ppkcookie' + i + '\nthat you set on a previous visit, is still active.\nIts value is ' + x);
       }
     }
     
   function createCookie(name,value,days) {
     if (days) {
-      var date = new Date();
+      let date = new Date();
       date.setTime(date.getTime()+(days*24*60*60*1000));
-      var expires = "; expires="+date.toGMTString();
+      let expires = "; expires="+date.toGMTString();
+    } else {
+      let expires = "";
     }
-    else var expires = "";
     document.cookie = name+"="+value+expires+"; path=/";
   }
 
   function readCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-      var c = ca[i];
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for(let i=0;i < ca.length;i++) {
+      let c = ca[i];
       while (c.charAt(0)==' ') c = c.substring(1,c.length);
       if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
     }
